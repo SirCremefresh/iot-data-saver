@@ -128,7 +128,7 @@ let mqttClient = null;
 
     async function getConfigFromSnap() {
         return {
-            DATABASE_HOST: await getSnapVariable('database.hofasdasdfst'),
+            DATABASE_HOST: await getSnapVariable('database.host'),
             DATABASE_PORT: await getSnapVariable('database.port'),
             DATABASE_USER: await getSnapVariable('database.user'),
             DATABASE_NAME: await getSnapVariable('database.name'),
@@ -142,8 +142,9 @@ let mqttClient = null;
 
     async function getSnapVariable(name) {
         const result = await exec(`snapctl get ${name}`);
-        if (result.stderr) {
-            console.log("could not find snapctl variable: ", name)
+        if (result.stdout.trim().length === 0) {
+            console.log("could not find snapctl variable: ", name);
+            process.exit(1);
         } else {
             return result.stdout.trim();
         }
