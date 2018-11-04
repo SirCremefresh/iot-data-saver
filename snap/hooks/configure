@@ -12,5 +12,4 @@ MQTT_PASSWORD="$(snapctl get mqtt.password)"
 
 if [ -z "$DATABASE_HOST" -o -z "$DATABASE_PORT" -o -z "$DATABASE_USER" -o -z "$DATABASE_NAME" -o -z "$DATABASE_PASSWORD" -o -z "$MQTT_URL" -o -z "$MQTT_USER" -o -z "$MQTT_PASSWORD" ]; then
     echo "you dont have all system variables set"
-    exit 1
 fi
