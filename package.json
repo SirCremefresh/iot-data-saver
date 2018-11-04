@@ -5,9 +5,14 @@
   "private": true,
   "bin": "./index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "snap-clean": "snapcraft clean iot-data-saver -s pull",
+    "snap-prime": "snapcraft prime",
+    "snap-run": "snap try prime/",
+    "snap-logs": "snap logs -n=1000 -f iot-data-saver"
   },
   "dependencies": {
+    "child-process-promise": "^2.2.1",
     "dotenv": "^6.1.0",
     "mqtt": "2.18.8",
     "mysql2": "^1.6.1"

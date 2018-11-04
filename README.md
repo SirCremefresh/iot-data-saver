@@ -17,6 +17,8 @@ sudo snap remove  bmw12-garage-door-server
 
 snap services
 
+# configure enviroment
+snap set iot-data-saver database.host= database.port= database.user= database.name= database.password= mqtt.url= mqtt.user= mqtt.password=
 
 
 # logs
