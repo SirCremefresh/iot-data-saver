@@ -1,0 +1,24 @@
+name: iot-data-saver
+version: '0.1'
+summary: saves mqtt data to db
+description: |
+  saves mqtt data to db
+
+grade: devel
+confinement: strict
+
+apps:
+  iot-data-saver:
+    command: bin/iot-data-saver
+    daemon: simple
+    restart-condition: always
+    plugs: [network-bind]
+
+
+parts:
+  iot-data-saver:
+    plugin: nodejs
+    source: .
+    node-engine: 10.9.0
+    node-package-manager: npm
+

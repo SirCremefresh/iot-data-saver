@@ -1,0 +1,21 @@
+{
+  "name": "iot-data-saver",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "bin": "./index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "mqtt": "2.18.8",
+    "mysql2": "^1.6.1"
+  },
+  "engines": {
+    "node": ">=10.9.0",
+    "npm": ">= 6.4.1"
+  },
+  "author": "SirCremefresh (donato.wolfisberg@gmail.com)",
+  "license": "ISC"
+}
