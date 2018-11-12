@@ -111,8 +111,9 @@ let mqttClient = null;
         return (
             typeof message.type === 'string' &&
             typeof message.place === 'string' &&
-            typeof message.sensorName === 'string' &&
+            typeof message.arduinoName === 'string' &&
             typeof message.isChangeEvt === 'boolean' &&
+            (typeof message.sensorName === 'string' || message.sensorName === null) &&
             (typeof message.value === 'number' || typeof message.value === 'boolean'));
     }
 
@@ -121,9 +122,9 @@ let mqttClient = null;
         const dataDouble = (typeof message.value === 'number') ? message.value : null;
 
         await dbPool.execute(`
-          INSERT INTO iot_data_1 (place, type, sensor_name, data_bool, data_double, is_change_evt, timestamp_evt)
-          values (?, ?, ?, ?, ?, ?, ?)
-        `, [message.place, message.type, message.sensorName, dataBool, dataDouble, message.isChangeEvt, new Date(Date.now())]);
+          INSERT INTO iot_data_1 (place, arduino_name, type, sensor_name, data_bool, data_double, is_change_evt, timestamp_evt)
+          values (?, ?, ?, ?, ?, ?, ?, ?)
+        `, [message.place, message.arduinoName, message.type, message.sensorName, dataBool, dataDouble, message.isChangeEvt, new Date(Date.now())]);
     }
 
     async function getConfigFromSnap() {
