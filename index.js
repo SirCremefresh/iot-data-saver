@@ -108,21 +108,33 @@ let mqttClient = null;
     }
 
     function isValidMessage(message) {
-        return (
-            typeof message.type === 'string' &&
+        if (!(typeof message.type === 'string' &&
             typeof message.place === 'string' &&
             typeof message.arduinoName === 'string' &&
-            typeof message.isChangeEvt === 'boolean' &&
             (typeof message.sensorName === 'string' || message.sensorName === null) &&
-            (typeof message.value === 'number' || typeof message.value === 'boolean'));
+            typeof message.isChangeEvt === 'boolean')) {
+            return false;
+        }
+
+        if (message.type === 'boot') {
+            return true;
+        }
+
+        return (typeof message.value === 'number' || typeof message.value === 'boolean');
     }
 
     async function saveMessageToDatabase(message) {
-        const dataBool = (typeof message.value === 'boolean') ? message.value : null;
-        const dataDouble = (typeof message.value === 'number') ? message.value : null;
+        let dataBool = null;
+        let dataDouble = null;
+        if (message !== 'boot') {
+            dataBool = (typeof message.value === 'boolean') ? message.value : null;
+            dataDouble = (typeof message.value === 'number') ? message.value : null;
+        }
+
 
         await dbPool.execute(`
-          INSERT INTO iot_data_1 (place, arduino_name, type, sensor_name, data_bool, data_double, is_change_evt, timestamp_evt)
+          INSERT INTO iot_data_1 (place, arduino_name, type, sensor_name, data_bool, data_double, is_change_evt,
+                                  timestamp_evt)
           values (?, ?, ?, ?, ?, ?, ?, ?)
         `, [message.place, message.arduinoName, message.type, message.sensorName, dataBool, dataDouble, message.isChangeEvt, new Date(Date.now())]);
     }
