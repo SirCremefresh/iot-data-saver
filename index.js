@@ -111,7 +111,6 @@ let mqttClient = null;
         if (!(typeof message.type === 'string' &&
             typeof message.place === 'string' &&
             typeof message.arduinoName === 'string' &&
-            (typeof message.sensorName === 'string' || message.sensorName === null) &&
             typeof message.isChangeEvt === 'boolean')) {
             return false;
         }
@@ -120,15 +119,18 @@ let mqttClient = null;
             return true;
         }
 
-        return (typeof message.value === 'number' || typeof message.value === 'boolean');
+        return ((typeof message.sensorName === 'string' || message.sensorName === null) &&
+            (typeof message.value === 'number' || typeof message.value === 'boolean'));
     }
 
     async function saveMessageToDatabase(message) {
         let dataBool = null;
         let dataDouble = null;
-        if (message !== 'boot') {
+        let sensorName = null;
+        if (message.type !== 'boot') {
             dataBool = (typeof message.value === 'boolean') ? message.value : null;
             dataDouble = (typeof message.value === 'number') ? message.value : null;
+            sensorName = message.sensorName;
         }
 
 
@@ -136,7 +138,7 @@ let mqttClient = null;
           INSERT INTO iot_data_1 (place, arduino_name, type, sensor_name, data_bool, data_double, is_change_evt,
                                   timestamp_evt)
           values (?, ?, ?, ?, ?, ?, ?, ?)
-        `, [message.place, message.arduinoName, message.type, message.sensorName, dataBool, dataDouble, message.isChangeEvt, new Date(Date.now())]);
+        `, [message.place, message.arduinoName, message.type, sensorName, dataBool, dataDouble, message.isChangeEvt, new Date(Date.now())]);
     }
 
     async function getConfigFromSnap() {
